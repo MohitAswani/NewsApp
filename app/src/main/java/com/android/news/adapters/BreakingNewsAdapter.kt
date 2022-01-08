@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.android.news.R
 import com.android.news.databinding.ItemArticleBinding
 import com.android.news.models.Article
 import com.bumptech.glide.Glide
+
 
 class BreakingNewsAdapter : RecyclerView.Adapter<BreakingNewsAdapter.NewsViewHolder>() {
 
@@ -33,12 +35,15 @@ class BreakingNewsAdapter : RecyclerView.Adapter<BreakingNewsAdapter.NewsViewHol
     {
         fun setArticle(article: Article)
         {
-            Glide.with(binding.root).load(article.urlToImage).into(binding.ivArticleImage)
+            Glide.with(binding.root)
+                .load(article.urlToImage)
+                .error(R.drawable.ic_news)
+                .into(binding.ivArticleImage)
             binding.tvSource.text=article.source.name
             binding.tvTitle.text=article.title
             binding.tvDescription.text=article.description
             binding.tvDate.text=article.publishedAt
-            binding.tvDescription.setOnClickListener{
+            binding.tvSource.setOnClickListener{
                 onItemClickListener?.let{it(article)}
             }
         }
@@ -60,5 +65,5 @@ class BreakingNewsAdapter : RecyclerView.Adapter<BreakingNewsAdapter.NewsViewHol
         }
     }
 
-    private val differ = AsyncListDiffer(this,differCallback)
+    val differ = AsyncListDiffer(this,differCallback)
 }

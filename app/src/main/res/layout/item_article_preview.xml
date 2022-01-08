@@ -4,27 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="4dp"
+        android:layout_margin="4dp"
+        >
 
-        <ImageView
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/ivArticleImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="110dp"
+            android:layout_height="150dp"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_height="300dp"
-            tools:layout_width="match_parent" />
+            app:layout_constraintBottom_toTopOf="@id/tvTitle"
+            app:riv_corner_radius="20dp"
+            tools:src="@drawable/ic_news" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="4dp"
             android:gravity="left"
-            android:textSize="32sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
