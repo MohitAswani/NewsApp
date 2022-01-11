@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -52,13 +53,13 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                 is Resource.Success ->{
                     hideProgressBar()
                     response.data?.let {
-                        newsAdapter.differ.submitList(it.articles)
+                        newsAdapter.differ.submitList(it.articles.toList())
                     }
                 }
                 is Resource.Error ->{
                     hideProgressBar()
                     response.message?.let{
-                        Log.e(TAG,"Error : $it")
+                        Toast.makeText(requireContext(),"An error occurred",Toast.LENGTH_LONG).show()
                     }
                 }
                 is Resource.Loading->{
@@ -67,17 +68,21 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
             }
         })
 
+
         return binding.root
     }
 
-    private fun setUpRecyclerView(){
-        newsAdapter= BreakingNewsAdapter()
-        binding.vpBreakingNews.apply {
-            adapter=newsAdapter
-            orientation=ViewPager2.ORIENTATION_VERTICAL
-        }
 
+    private fun setUpRecyclerView() {
+        newsAdapter = BreakingNewsAdapter()
+        binding.vpBreakingNews.apply {
+            adapter = newsAdapter
+            orientation = ViewPager2.ORIENTATION_VERTICAL
+            registerOnPageChangeCallback(vpPageListener)
+        }
     }
+
+
 
     private fun hideProgressBar(){
         binding.paginationProgressBar.visibility=View.INVISIBLE
@@ -85,6 +90,38 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
     private fun showProgressBar(){
         binding.paginationProgressBar.visibility=View.VISIBLE
+    }
+
+    var paginated=false
+    var isScrolling=false
+
+
+
+    private val vpPageListener=object : ViewPager2.OnPageChangeCallback(){
+        override fun onPageScrollStateChanged(state: Int) {
+            super.onPageScrollStateChanged(state)
+            if(state==ViewPager2.SCROLL_STATE_DRAGGING){
+                isScrolling=true
+            }
+        }
+
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+            super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+            Log.d(TAG,"${viewModel.breakingNewsResponse?.articles?.size},${position}")
+            if(position+2==viewModel.breakingNewsResponse?.articles?.size && !paginated) {
+                Log.d(TAG,"Loading more articles")
+                paginated=true
+                viewModel.getBreakingNews("in")
+                isScrolling=false
+            }
+            if(position==(viewModel.breakingNewsResponse?.articles?.size)?.div(2)){
+                paginated=false
+            }
+        }
     }
 
 }

@@ -12,12 +12,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/searchHint"
+            android:background="@drawable/etdrawable"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:layout_margin="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:autofillHints=""
             android:inputType="text" />
+
+        <ImageView
+            android:id="@+id/searchImage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="center"
+            android:background="@drawable/ic_search_1"
+            app:layout_constraintTop_toBottomOf="@id/etSearch"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSearchNews"
@@ -25,6 +39,7 @@
             android:layout_height="0dp"
             android:clipToPadding="false"
             android:paddingBottom="50dp"
+            android:visibility="invisible"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etSearch"
